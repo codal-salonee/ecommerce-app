@@ -1,0 +1,13 @@
+- header
+- footer
+- home page think
+- hide certain options like delete or something
+- page builder
+- seo
+- deploy studio 
+- deploy on vercel
+- media
+- references
+- lottie
+- blog - placeholder thing ?
+- what is presentation mode
