@@ -1,4 +1,5 @@
 - header
+- typescript
 - footer
 - home page think
 - hide certain options like delete or something
@@ -11,3 +12,4 @@
 - lottie
 - blog - placeholder thing ?
 - what is presentation mode
+- use seo at all places

@@ -1,5 +1,5 @@
-import Footer from "@/app/components/footer";
-import Header from "@/app/components/header";
+import Header from "@/components/layout/header";
+import Footer from "@/components/layout/footer";
 import { SanityLive } from "@/sanity/lib/live";
 
 export default function layout({

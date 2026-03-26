@@ -22,6 +22,45 @@ export default defineType({
       },
       validation: (Rule) => Rule.required(),
     }),
+
+    // Radio to decide type
+    defineField({
+      name: "categoryType",
+      type: "string",
+      title: "Category Type",
+      options: {
+        list: [
+          { title: "Parent", value: "parent" },
+          { title: "Child", value: "child" },
+        ],
+        layout: "radio",
+        direction: "horizontal",
+      },
+      initialValue: "child",
+      validation: (Rule) => Rule.required(),
+    }),
+    // Shown only when categoryType === "child" — mandatory
+    defineField({
+      name: "parent",
+      type: "reference",
+      title: "Parent Category",
+      to: [{ type: "category" }],
+      hidden: ({ document }) => document?.categoryType !== "child",
+      options: {
+        // Only show documents that are parent type & not itself
+        filter: ({ document }) => ({
+          filter: 'categoryType == "parent" && _id != $id',
+          params: { id: document._id },
+        }),
+      },
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          if (context.document?.categoryType === "child" && !value) {
+            return "A child category must have a parent.";
+          }
+          return true;
+        }),
+    }),
     defineField({
       name: "headerContent",
       type: "text",
@@ -56,4 +95,20 @@ export default defineType({
       title: "SEO",
     }),
   ],
+  preview: {
+    select: {
+      title: "name",
+      categoryType: "categoryType",
+      parentName: "parent.name",
+    },
+    prepare({ title, categoryType, parentName }) {
+      return {
+        title,
+        subtitle:
+          categoryType === "child"
+            ? `Child of: ${parentName ?? "⚠️ No parent set"}`
+            : "Parent category",
+      };
+    },
+  },
 });
