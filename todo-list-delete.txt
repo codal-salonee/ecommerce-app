@@ -1,10 +1,7 @@
-- header
-- typescript
-- footer
 - home page think
-- hide certain options like delete or something
 - page builder
-- seo
+- add social links in footer
+- hide certain options like delete or something
 - deploy studio 
 - deploy on vercel
 - media
@@ -13,3 +10,8 @@
 - blog - placeholder thing ?
 - what is presentation mode
 - use seo at all places
+
+
+
+Queries
+- typescript issue for defineField

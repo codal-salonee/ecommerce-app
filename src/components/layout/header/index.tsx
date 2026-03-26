@@ -1,4 +1,4 @@
-import { CATEGORIES_QUERY } from "@/lib/queries/category";
+import { CATEGORIES_QUERY } from "@/lib/queries";
 import { sanityFetch } from "@/sanity/lib/live";
 import Link from "next/link";
 import Actions from "./actions";

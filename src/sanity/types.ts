@@ -13,6 +13,36 @@
  */
 
 // Source: schema.json
+export type Link = {
+  _type: "link";
+  label?: string;
+  linkType?: "internal" | "external";
+  internalLink?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  externalUrl?: string;
+};
+
+export type NavItem = {
+  _type: "navItem";
+  type?: "dropdown" | "link";
+  label: string;
+  linkType?: "internal" | "external";
+  internalLink?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  externalUrl?: string;
+  children?: Array<{
+    _key: string;
+  } & Link>;
+};
+
 export type Seo = {
   _type: "seo";
   metaTitle?: string;
@@ -56,6 +86,19 @@ export type Seo = {
     noIndex?: boolean;
     noFollow?: boolean;
   };
+};
+
+export type Footer = {
+  _id: string;
+  _type: "footer";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  statement1?: string;
+  statement2?: string;
+  navigation?: Array<{
+    _key: string;
+  } & NavItem>;
 };
 
 export type Category = {
@@ -208,9 +251,9 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = Seo | Category | SanityImageCrop | SanityImageHotspot | Slug | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = Link | NavItem | Seo | Footer | Category | SanityImageCrop | SanityImageHotspot | Slug | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;
-// Source: ./src/lib/queries/category.ts
+// Source: ./src/lib/queries/index.ts
 // Variable: CATEGORIES_QUERY
 // Query: *[_type == "category" && categoryType == "parent"] | order(name asc) {    name,    "slug": slug.current,    "children": *[_type == "category" && categoryType == "child" && parent._ref == ^._id] | order(name asc) {      name,      "slug": slug.current    }  }
 export type CATEGORIES_QUERYResult = Array<{
@@ -221,11 +264,43 @@ export type CATEGORIES_QUERYResult = Array<{
     slug: string;
   }>;
 }>;
+// Variable: FOOTER_QUERY
+// Query: *[_type == "footer"][0] {    statement1,    statement2,    navigation[] {      ...,      children[] {        ...,          label,  linkType,  internalLink->{ slug { current } },  externalUrl      },        label,  linkType,  internalLink->{ slug { current } },  externalUrl    },  }
+export type FOOTER_QUERYResult = {
+  statement1: string | null;
+  statement2: string | null;
+  navigation: Array<{
+    _key: string;
+    _type: "navItem";
+    type?: "dropdown" | "link";
+    label: string;
+    linkType: "external" | "internal" | null;
+    internalLink: {
+      slug: {
+        current: string;
+      };
+    } | null;
+    externalUrl: string | null;
+    children: Array<{
+      _key: string;
+      _type: "link";
+      label: string | null;
+      linkType: "external" | "internal" | null;
+      internalLink: {
+        slug: {
+          current: string;
+        };
+      } | null;
+      externalUrl: string | null;
+    }> | null;
+  }> | null;
+} | null;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "\n  *[_type == \"category\" && categoryType == \"parent\"] | order(name asc) {\n    name,\n    \"slug\": slug.current,\n    \"children\": *[_type == \"category\" && categoryType == \"child\" && parent._ref == ^._id] | order(name asc) {\n      name,\n      \"slug\": slug.current\n    }\n  }\n": CATEGORIES_QUERYResult;
+    "\n  *[_type == \"footer\"][0] {\n    statement1,\n    statement2,\n    navigation[] {\n      ...,\n      children[] {\n        ...,\n        \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n      },\n      \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n    },\n  }\n": FOOTER_QUERYResult;
   }
 }
