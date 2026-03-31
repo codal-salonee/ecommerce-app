@@ -4,8 +4,8 @@
 - hide certain options like delete or something
 - deploy studio 
 - deploy on vercel
-- media
-- references
+- media - plugin
+- references - plugin
 - lottie
 - blog - placeholder thing ?
 - what is presentation mode
@@ -15,3 +15,6 @@
 
 Queries
 - typescript issue for defineField
+- singleton footer - id thing
+- was getting some error while using [$start .. $end] 
+- sorting and filter

@@ -32,3 +32,25 @@ export const FOOTER_QUERY = defineQuery(`
     },
   }
 `);
+
+export const PRODUCT_LIST_QUERY = `
+ *[_type == "product" && $categorySlug in productCategory[]->slug.current]
+    | order(_createdAt desc)[$start...$end]{
+      _id,
+      name,
+      slug,
+      price,
+      images,
+    }
+`;
+
+export const PRODUCT_LISTING_QUERY = defineQuery(`{
+  "products": ${PRODUCT_LIST_QUERY},
+  "totalProducts": count(*[_type == "product" && $categorySlug in productCategory[]->slug.current]),
+  "category": *[_type == "category" && slug.current == $categorySlug][0]{
+    name,
+    slug,
+    headerContent,
+    footerContent,
+  }
+}`);

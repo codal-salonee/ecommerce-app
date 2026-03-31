@@ -88,6 +88,96 @@ export type Seo = {
   };
 };
 
+export type BlockContent = Array<{
+  children?: Array<{
+    marks?: Array<string>;
+    text?: string;
+    _type: "span";
+    _key: string;
+  }>;
+  style?: "normal" | "h1" | "h2" | "h3" | "h4" | "blockquote";
+  listItem?: "bullet";
+  markDefs?: Array<{
+    href?: string;
+    _type: "link";
+    _key: string;
+  }>;
+  level?: number;
+  _type: "block";
+  _key: string;
+} | {
+  asset?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+  };
+  media?: unknown;
+  hotspot?: SanityImageHotspot;
+  crop?: SanityImageCrop;
+  alt?: string;
+  _type: "image";
+  _key: string;
+}>;
+
+export type Product = {
+  _id: string;
+  _type: "product";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  name: string;
+  slug: Slug;
+  productCategory: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+  images?: Array<{
+    asset?: {
+      _ref: string;
+      _type: "reference";
+      _weak?: boolean;
+      [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+    };
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    caption?: string;
+    _type: "image";
+    _key: string;
+  }>;
+  description: BlockContent;
+  price: number;
+  isOutOfStock: boolean;
+  seo?: Seo;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top: number;
+  bottom: number;
+  left: number;
+  right: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x: number;
+  y: number;
+  height: number;
+  width: number;
+};
+
+export type Slug = {
+  _type: "slug";
+  current: string;
+  source?: string;
+};
+
 export type Footer = {
   _id: string;
   _type: "footer";
@@ -131,28 +221,6 @@ export type Category = {
     _type: "image";
   };
   seo?: Seo;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x: number;
-  y: number;
-  height: number;
-  width: number;
-};
-
-export type Slug = {
-  _type: "slug";
-  current: string;
-  source?: string;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -251,7 +319,7 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = Link | NavItem | Seo | Footer | Category | SanityImageCrop | SanityImageHotspot | Slug | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = Link | NavItem | Seo | BlockContent | Product | SanityImageCrop | SanityImageHotspot | Slug | Footer | Category | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/lib/queries/index.ts
 // Variable: CATEGORIES_QUERY
@@ -295,6 +363,38 @@ export type FOOTER_QUERYResult = {
     }> | null;
   }> | null;
 } | null;
+// Variable: PRODUCT_LISTING_QUERY
+// Query: {  "products":  *[_type == "product" && $categorySlug in productCategory[]->slug.current]    | order(_createdAt desc)[$start...$end]{      _id,      name,      slug,      price,      images,    },  "totalProducts": count(*[_type == "product" && $categorySlug in productCategory[]->slug.current]),  "category": *[_type == "category" && slug.current == $categorySlug][0]{    name,    slug,    headerContent,    footerContent,  }}
+export type PRODUCT_LISTING_QUERYResult = {
+  products: Array<{
+    _id: string;
+    name: string;
+    slug: Slug;
+    price: number;
+    images: Array<{
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      caption?: string;
+      _type: "image";
+      _key: string;
+    }> | null;
+  }>;
+  totalProducts: number;
+  category: {
+    name: string;
+    slug: Slug;
+    headerContent: string | null;
+    footerContent: string | null;
+  } | null;
+};
 
 // Query TypeMap
 import "@sanity/client";
@@ -302,5 +402,6 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "\n  *[_type == \"category\" && categoryType == \"parent\"] | order(name asc) {\n    name,\n    \"slug\": slug.current,\n    \"children\": *[_type == \"category\" && categoryType == \"child\" && parent._ref == ^._id] | order(name asc) {\n      name,\n      \"slug\": slug.current\n    }\n  }\n": CATEGORIES_QUERYResult;
     "\n  *[_type == \"footer\"][0] {\n    statement1,\n    statement2,\n    navigation[] {\n      ...,\n      children[] {\n        ...,\n        \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n      },\n      \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n    },\n  }\n": FOOTER_QUERYResult;
+    "{\n  \"products\": \n *[_type == \"product\" && $categorySlug in productCategory[]->slug.current]\n    | order(_createdAt desc)[$start...$end]{\n      _id,\n      name,\n      slug,\n      price,\n      images,\n    }\n,\n  \"totalProducts\": count(*[_type == \"product\" && $categorySlug in productCategory[]->slug.current]),\n  \"category\": *[_type == \"category\" && slug.current == $categorySlug][0]{\n    name,\n    slug,\n    headerContent,\n    footerContent,\n  }\n}": PRODUCT_LISTING_QUERYResult;
   }
 }
