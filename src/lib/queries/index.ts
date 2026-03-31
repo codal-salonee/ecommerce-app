@@ -33,8 +33,16 @@ export const FOOTER_QUERY = defineQuery(`
   }
 `);
 
+const FILTER_FRAGMENT = `$filter == "" || 
+    ($filter == "price_above_200" && price > 200) || 
+    ($filter == "price_below_200" && price < 200) || 
+    ($filter == "out_of_stock" && isOutOfStock == true) || 
+    ($filter == "in_stock" && isOutOfStock == false)`;
+
 export const PRODUCT_LIST_QUERY = `
- *[_type == "product" && $categorySlug in productCategory[]->slug.current]
+ *[_type == "product" && $categorySlug in productCategory[]->slug.current && (
+    ${FILTER_FRAGMENT}
+  )]
     | order(_createdAt desc)[$start...$end]{
       _id,
       name,
@@ -46,7 +54,9 @@ export const PRODUCT_LIST_QUERY = `
 
 export const PRODUCT_LISTING_QUERY = defineQuery(`{
   "products": ${PRODUCT_LIST_QUERY},
-  "totalProducts": count(*[_type == "product" && $categorySlug in productCategory[]->slug.current]),
+  "totalProducts": count(*[_type == "product" && $categorySlug in productCategory[]->slug.current && (
+   ${FILTER_FRAGMENT}
+  )]),
   "category": *[_type == "category" && slug.current == $categorySlug][0]{
     name,
     slug,

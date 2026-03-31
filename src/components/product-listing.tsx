@@ -3,6 +3,7 @@
 import { PRODUCT_LIST_QUERY } from "@/lib/queries";
 import { client } from "@/sanity/lib/client";
 import type { PRODUCT_LISTING_QUERYResult } from "@/sanity/types";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import FilterSort from "./filter-sort";
 import ProductCard from "./product-card";
@@ -18,8 +19,10 @@ export default function ProductListing({
   pageSize: number;
   totalProducts: number;
 }) {
+  const searchParams = useSearchParams();
+  const filter = searchParams.get("filter") || "";
   const { products, category } = productsData;
-  const [allProducts, setAllProducts] = useState(products);
+  const [allProducts, setAllProducts] = useState(products || []);
   const [currentPage, setCurrentPage] = useState(1);
   const hasMore = totalProducts > allProducts.length;
 
@@ -44,7 +47,7 @@ export default function ProductListing({
         </p>
 
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {allProducts.map((product) => (
+          {allProducts?.map((product) => (
             <ProductCard
               key={product._id}
               productDetails={product}
@@ -66,6 +69,7 @@ export default function ProductListing({
                     categorySlug: category?.slug.current,
                     start: currentPage * pageSize,
                     end: (currentPage + 1) * pageSize,
+                    filter,
                   },
                 );
                 setCurrentPage((prevPage) => prevPage + 1);

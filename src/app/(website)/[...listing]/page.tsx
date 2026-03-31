@@ -9,23 +9,27 @@ export default async function ProductListingPage({
   searchParams,
 }: {
   params: Promise<{ listing: string[] }>;
-  searchParams: Promise<{ sortOf?: string; sortBy?: string }>;
+  searchParams: Promise<{ sortOf?: string; sortBy?: string; filter: string }>;
 }) {
   const { listing: categoryList } = await params;
   const categorySlug = categoryList.pop();
+  const { filter = "" } = await searchParams;
 
   const { data: productsData } = await sanityFetch({
     query: PRODUCT_LISTING_QUERY,
     params: {
       categorySlug,
+      sortOrder: "asc",
       start: 0,
       end: PAGE_SIZE,
+      filter,
     },
   });
-  console.log("productsData", productsData);
+  console.log("productsData==>", productsData);
 
   return (
     <ProductListing
+      key={filter}
       productsData={productsData}
       pageSize={PAGE_SIZE}
       totalProducts={productsData.totalProducts}

@@ -16,13 +16,31 @@ const SORT_OPTIONS = [
   { label: "Price: Low to High", value: "price_asc" },
   { label: "Price: High to Low", value: "price_desc" },
 ];
-// const FILTER_TAGS = ["All", "Women", "Men", "New", "Sale"];
+
+const FILTER_OPTIONS = [
+  { label: "All", value: "" },
+  { label: "Price above 200", value: "price_above_200" },
+  { label: "Price below 200", value: "price_below_200" },
+  { label: "Out of stock", value: "out_of_stock" },
+  { label: "In stock", value: "in_stock" },
+];
 
 export default function FilterSort() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const filterBy = searchParams.get("filter") ?? "";
   const sortBy = searchParams.get("sort") ?? "newest";
+
+  const handleFilter = (value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "") {
+      params.delete("filter");
+    } else {
+      params.set("filter", value);
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
 
   const handleSort = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -41,23 +59,23 @@ export default function FilterSort() {
     <>
       <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-[#e8e4df]">
         {/* Filter Tags */}
-        {/* <div className="flex items-center gap-2 flex-wrap">
-          <SlidersHorizontal size={14} className="text-[#7A776F] mr-1" />
-          {FILTER_TAGS.map((tag) => (
+        <div className="flex items-center gap-2 flex-wrap">
+          {FILTER_OPTIONS.map(({ label, value }) => (
             <button
-              key={tag}
-              onClick={() => setActiveFilter(tag)}
+              key={value}
+              onClick={() => handleFilter(value)}
               className={`text-[0.65rem] tracking-widest uppercase px-3 py-1.5 border transition-colors duration-200
                 ${
-                  activeFilter === tag
+                  filterBy === value
                     ? "bg-[#1C1B1A] text-white border-[#1C1B1A]"
                     : "bg-transparent text-[#7A776F] border-[#ddd9d4] hover:border-[#1C1B1A] hover:text-[#1C1B1A]"
-                }`}
+                }
+                    `}
             >
-              {tag}
+              {label}
             </button>
           ))}
-        </div> */}
+        </div>
 
         {/* Sort */}
         <div className="flex items-center gap-2 text-[0.65rem] tracking-widest uppercase text-[#7A776F]">

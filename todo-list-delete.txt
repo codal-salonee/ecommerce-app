@@ -17,4 +17,4 @@ Queries
 - typescript issue for defineField
 - singleton footer - id thing
 - was getting some error while using [$start .. $end] 
-- sorting and filter
+- sorting
