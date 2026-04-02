@@ -1,7 +1,8 @@
-- home page think
 - page builder
+- product detail
 - add social links in footer
 - hide certain options like delete or something
+- make sure to add robot.txt file
 - deploy studio 
 - deploy on vercel
 - media - plugin

@@ -13,34 +13,24 @@
  */
 
 // Source: schema.json
-export type Link = {
-  _type: "link";
-  label?: string;
-  linkType?: "internal" | "external";
-  internalLink?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "category";
-  };
-  externalUrl?: string;
-};
-
-export type NavItem = {
-  _type: "navItem";
-  type?: "dropdown" | "link";
-  label: string;
-  linkType?: "internal" | "external";
-  internalLink?: {
-    _ref: string;
-    _type: "reference";
-    _weak?: boolean;
-    [internalGroqTypeReferenceTo]?: "category";
-  };
-  externalUrl?: string;
-  children?: Array<{
+export type SeoSchema = {
+  _type: "seoSchema";
+  serviceName?: string;
+  serviceDescription?: string;
+  serviceType?: string;
+  areaServed?: string;
+  offerCatalogName?: string;
+  offers?: Array<{
+    name: string;
+    description: string;
     _key: string;
-  } & Link>;
+  }>;
+  faqs?: Array<{
+    question: string;
+    answer: string;
+    _key: string;
+  }>;
+  jsonLdPageLevelOverride?: string;
 };
 
 export type Seo = {
@@ -88,6 +78,36 @@ export type Seo = {
   };
 };
 
+export type Link = {
+  _type: "link";
+  label?: string;
+  linkType?: "internal" | "external";
+  internalLink?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  externalUrl?: string;
+};
+
+export type NavItem = {
+  _type: "navItem";
+  type?: "dropdown" | "link";
+  label: string;
+  linkType?: "internal" | "external";
+  internalLink?: {
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    [internalGroqTypeReferenceTo]?: "category";
+  };
+  externalUrl?: string;
+  children?: Array<{
+    _key: string;
+  } & Link>;
+};
+
 export type BlockContent = Array<{
   children?: Array<{
     marks?: Array<string>;
@@ -119,6 +139,72 @@ export type BlockContent = Array<{
   _type: "image";
   _key: string;
 }>;
+
+export type ProductsSection = {
+  _type: "productsSection";
+  title?: string;
+  viewAllLink?: Link;
+  products?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "product";
+  }>;
+};
+
+export type CategoryIconList = {
+  _type: "categoryIconList";
+  categories?: Array<{
+    _ref: string;
+    _type: "reference";
+    _weak?: boolean;
+    _key: string;
+    [internalGroqTypeReferenceTo]?: "category";
+  }>;
+};
+
+export type HeroBanner = {
+  _type: "heroBanner";
+  leftBanner?: {
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    link: Link;
+  };
+  rightBanner?: {
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    link: Link;
+  };
+};
+
+export type PageBuilder = Array<{
+  _key: string;
+} & HeroBanner | {
+  _key: string;
+} & CategoryIconList | {
+  _key: string;
+} & ProductsSection>;
 
 export type Product = {
   _id: string;
@@ -223,6 +309,17 @@ export type Category = {
   seo?: Seo;
 };
 
+export type Homepage = {
+  _id: string;
+  _type: "homepage";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  sections?: PageBuilder;
+  seo?: Seo;
+  seoSchema?: SeoSchema;
+};
+
 export type SanityImagePaletteSwatch = {
   _type: "sanity.imagePaletteSwatch";
   background?: string;
@@ -319,7 +416,7 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = Link | NavItem | Seo | BlockContent | Product | SanityImageCrop | SanityImageHotspot | Slug | Footer | Category | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = SeoSchema | Seo | Link | NavItem | BlockContent | ProductsSection | CategoryIconList | HeroBanner | PageBuilder | Product | SanityImageCrop | SanityImageHotspot | Slug | Footer | Category | Homepage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/lib/queries/index.ts
 // Variable: CATEGORIES_QUERY
@@ -364,7 +461,7 @@ export type FOOTER_QUERYResult = {
   }> | null;
 } | null;
 // Variable: PRODUCT_LISTING_QUERY
-// Query: {  "products":  *[_type == "product" && $categorySlug in productCategory[]->slug.current]    | order(_createdAt desc)[$start...$end]{      _id,      name,      slug,      price,      images,    },  "totalProducts": count(*[_type == "product" && $categorySlug in productCategory[]->slug.current]),  "category": *[_type == "category" && slug.current == $categorySlug][0]{    name,    slug,    headerContent,    footerContent,  }}
+// Query: {  "products":  *[_type == "product" && $categorySlug in productCategory[]->slug.current && (    $filter == "" ||     ($filter == "price_above_200" && price > 200) ||     ($filter == "price_below_200" && price < 200) ||     ($filter == "out_of_stock" && isOutOfStock == true) ||     ($filter == "in_stock" && isOutOfStock == false)  )]    | order(_createdAt desc)[$start...$end]{      _id,      name,      slug,      price,      images,    },  "totalProducts": count(*[_type == "product" && $categorySlug in productCategory[]->slug.current && (   $filter == "" ||     ($filter == "price_above_200" && price > 200) ||     ($filter == "price_below_200" && price < 200) ||     ($filter == "out_of_stock" && isOutOfStock == true) ||     ($filter == "in_stock" && isOutOfStock == false)  )]),  "category": *[_type == "category" && slug.current == $categorySlug][0]{    name,    slug,    headerContent,    footerContent,  }}
 export type PRODUCT_LISTING_QUERYResult = {
   products: Array<{
     _id: string;
@@ -402,6 +499,6 @@ declare module "@sanity/client" {
   interface SanityQueries {
     "\n  *[_type == \"category\" && categoryType == \"parent\"] | order(name asc) {\n    name,\n    \"slug\": slug.current,\n    \"children\": *[_type == \"category\" && categoryType == \"child\" && parent._ref == ^._id] | order(name asc) {\n      name,\n      \"slug\": slug.current\n    }\n  }\n": CATEGORIES_QUERYResult;
     "\n  *[_type == \"footer\"][0] {\n    statement1,\n    statement2,\n    navigation[] {\n      ...,\n      children[] {\n        ...,\n        \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n      },\n      \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n    },\n  }\n": FOOTER_QUERYResult;
-    "{\n  \"products\": \n *[_type == \"product\" && $categorySlug in productCategory[]->slug.current]\n    | order(_createdAt desc)[$start...$end]{\n      _id,\n      name,\n      slug,\n      price,\n      images,\n    }\n,\n  \"totalProducts\": count(*[_type == \"product\" && $categorySlug in productCategory[]->slug.current]),\n  \"category\": *[_type == \"category\" && slug.current == $categorySlug][0]{\n    name,\n    slug,\n    headerContent,\n    footerContent,\n  }\n}": PRODUCT_LISTING_QUERYResult;
+    "{\n  \"products\": \n *[_type == \"product\" && $categorySlug in productCategory[]->slug.current && (\n    $filter == \"\" || \n    ($filter == \"price_above_200\" && price > 200) || \n    ($filter == \"price_below_200\" && price < 200) || \n    ($filter == \"out_of_stock\" && isOutOfStock == true) || \n    ($filter == \"in_stock\" && isOutOfStock == false)\n  )]\n    | order(_createdAt desc)[$start...$end]{\n      _id,\n      name,\n      slug,\n      price,\n      images,\n    }\n,\n  \"totalProducts\": count(*[_type == \"product\" && $categorySlug in productCategory[]->slug.current && (\n   $filter == \"\" || \n    ($filter == \"price_above_200\" && price > 200) || \n    ($filter == \"price_below_200\" && price < 200) || \n    ($filter == \"out_of_stock\" && isOutOfStock == true) || \n    ($filter == \"in_stock\" && isOutOfStock == false)\n  )]),\n  \"category\": *[_type == \"category\" && slug.current == $categorySlug][0]{\n    name,\n    slug,\n    headerContent,\n    footerContent,\n  }\n}": PRODUCT_LISTING_QUERYResult;
   }
 }
