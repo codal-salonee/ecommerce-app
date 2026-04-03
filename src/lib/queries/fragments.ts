@@ -26,7 +26,7 @@ export const FRAGMENT_CATEGORY_ICON_LIST = `
     _type == "categoryIconList" => {
      categories[]->{
        name,
-       slug
+       slug,
      }
     }
 `;
@@ -38,6 +38,8 @@ export const FRAGMENT_PRODUCTS_SECTION = `
         ${FRAGMENT_LINK}
       },
       products[]->{
+        _id,
+        price,
         name,
         "slug": slug.current,
         images
@@ -74,7 +76,12 @@ export const FRAGMENT_BANNERS = `
 
 export const FRAGMENT_TESTIMONIAL = `
      _type == "testimonial" => {
+        title,
+        viewAllReviews {
+          ${FRAGMENT_LINK}
+        },
         testimonials[]{
+          _key,
           author,
           details,
           review

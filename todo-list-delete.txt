@@ -1,4 +1,3 @@
-- page builder
 - product detail
 - add social links in footer
 - make sure to add robot.txt file
@@ -15,6 +14,6 @@
 
 Queries
 - typescript issue for defineField
+- typescript reference issue
 - singleton footer - id thing
-- was getting some error while using [$start .. $end] 
 - sorting
