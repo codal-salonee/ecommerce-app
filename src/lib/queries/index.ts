@@ -1,11 +1,13 @@
 import { defineQuery } from "next-sanity";
+import { FRAGMENT_LINK, FRAGMENT_PAGE_DETAILS } from "./fragments";
 
-export const FRAGMENT_LINK = `
-  label,
-  linkType,
-  internalLink->{ slug { current } },
-  externalUrl
-`;
+export const HomePageQuery = defineQuery(`
+  *[_type == "homepage"][0]{
+    _id,
+    ${FRAGMENT_PAGE_DETAILS}
+    // TODO: Add seo and schema
+  }
+`);
 
 export const CATEGORIES_QUERY = defineQuery(`
   *[_type == "category" && categoryType == "parent"] | order(name asc) {

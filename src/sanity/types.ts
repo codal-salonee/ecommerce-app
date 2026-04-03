@@ -140,6 +140,73 @@ export type BlockContent = Array<{
   _key: string;
 }>;
 
+export type Faqs = {
+  _type: "faqs";
+  title?: string;
+  description?: BlockContent;
+  questions?: Array<{
+    question: string;
+    answer: string;
+    _key: string;
+  }>;
+};
+
+export type Testimonial = {
+  _type: "testimonial";
+  title?: string;
+  viewAllReviews: Link;
+  testimonials?: Array<{
+    author: string;
+    details?: string;
+    review: number;
+    _key: string;
+  }>;
+};
+
+export type Banners = {
+  _type: "banners";
+  banner?: Array<{
+    image: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    link: Link;
+    _key: string;
+  }>;
+};
+
+export type QuickDelivery = {
+  _type: "quickDelivery";
+  title?: string;
+  subtitle?: string;
+  banners?: Array<{
+    title?: string;
+    image?: {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      _type: "image";
+    };
+    link: Link;
+    _key: string;
+  }>;
+  deliveryText?: string;
+};
+
 export type ProductsSection = {
   _type: "productsSection";
   title?: string;
@@ -204,7 +271,15 @@ export type PageBuilder = Array<{
   _key: string;
 } & CategoryIconList | {
   _key: string;
-} & ProductsSection>;
+} & ProductsSection | {
+  _key: string;
+} & QuickDelivery | {
+  _key: string;
+} & Banners | {
+  _key: string;
+} & Testimonial | {
+  _key: string;
+} & Faqs>;
 
 export type Product = {
   _id: string;
@@ -416,9 +491,211 @@ export type Geopoint = {
   alt?: number;
 };
 
-export type AllSanitySchemaTypes = SeoSchema | Seo | Link | NavItem | BlockContent | ProductsSection | CategoryIconList | HeroBanner | PageBuilder | Product | SanityImageCrop | SanityImageHotspot | Slug | Footer | Category | Homepage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
+export type AllSanitySchemaTypes = SeoSchema | Seo | Link | NavItem | BlockContent | Faqs | Testimonial | Banners | QuickDelivery | ProductsSection | CategoryIconList | HeroBanner | PageBuilder | Product | SanityImageCrop | SanityImageHotspot | Slug | Footer | Category | Homepage | SanityImagePaletteSwatch | SanityImagePalette | SanityImageDimensions | SanityImageMetadata | SanityFileAsset | SanityAssetSourceData | SanityImageAsset | Geopoint;
 export declare const internalGroqTypeReferenceTo: unique symbol;
 // Source: ./src/lib/queries/index.ts
+// Variable: HomePageQuery
+// Query: *[_type == "homepage"][0]{    _id,      sections[]{    _type,    _key,        _type == "heroBanner" => {      leftBanner {        image,        link {            label,  linkType,  internalLink->{ slug { current } },  externalUrl        }      },      rightBanner {        image,        link {            label,  linkType,  internalLink->{ slug { current } },  externalUrl        }      }    },        _type == "categoryIconList" => {     categories[]->{       name,       slug     }    },        _type == "productsSection" => {      title,      viewAllLink {          label,  linkType,  internalLink->{ slug { current } },  externalUrl      },      products[]->{        name,        "slug": slug.current,        images      }    },        _type == "quickDelivery" => {      title,      subtitle,      deliveryText,      banners[]{        title,        image,        link {            label,  linkType,  internalLink->{ slug { current } },  externalUrl        }      }    },        _type == "banners" => {        banner[]{          image,          link {              label,  linkType,  internalLink->{ slug { current } },  externalUrl          }        }    },         _type == "testimonial" => {        testimonials[]{          author,          details,          review        }    },        _type == "faqs" => {        description[],        questions[]{          _key,          question,          answer        }    }  }    // TODO: Add seo and schema  }
+export type HomePageQueryResult = {
+  _id: string;
+  sections: Array<{
+    _type: "banners";
+    _key: string;
+    banner: Array<{
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      link: {
+        label: string | null;
+        linkType: "external" | "internal" | null;
+        internalLink: {
+          slug: {
+            current: string;
+          };
+        } | null;
+        externalUrl: string | null;
+      };
+    }> | null;
+  } | {
+    _type: "categoryIconList";
+    _key: string;
+    categories: Array<{
+      name: string;
+      slug: Slug;
+    }> | null;
+  } | {
+    _type: "faqs";
+    _key: string;
+    description: Array<{
+      children?: Array<{
+        marks?: Array<string>;
+        text?: string;
+        _type: "span";
+        _key: string;
+      }>;
+      style?: "blockquote" | "h1" | "h2" | "h3" | "h4" | "normal";
+      listItem?: "bullet";
+      markDefs?: Array<{
+        href?: string;
+        _type: "link";
+        _key: string;
+      }>;
+      level?: number;
+      _type: "block";
+      _key: string;
+    } | {
+      asset?: {
+        _ref: string;
+        _type: "reference";
+        _weak?: boolean;
+        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+      };
+      media?: unknown;
+      hotspot?: SanityImageHotspot;
+      crop?: SanityImageCrop;
+      alt?: string;
+      _type: "image";
+      _key: string;
+    }> | null;
+    questions: Array<{
+      _key: string;
+      question: string;
+      answer: string;
+    }> | null;
+  } | {
+    _type: "heroBanner";
+    _key: string;
+    leftBanner: {
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      link: {
+        label: string | null;
+        linkType: "external" | "internal" | null;
+        internalLink: {
+          slug: {
+            current: string;
+          };
+        } | null;
+        externalUrl: string | null;
+      };
+    } | null;
+    rightBanner: {
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      };
+      link: {
+        label: string | null;
+        linkType: "external" | "internal" | null;
+        internalLink: {
+          slug: {
+            current: string;
+          };
+        } | null;
+        externalUrl: string | null;
+      };
+    } | null;
+  } | {
+    _type: "productsSection";
+    _key: string;
+    title: string | null;
+    viewAllLink: {
+      label: string | null;
+      linkType: "external" | "internal" | null;
+      internalLink: {
+        slug: {
+          current: string;
+        };
+      } | null;
+      externalUrl: string | null;
+    } | null;
+    products: Array<{
+      name: string;
+      slug: string;
+      images: Array<{
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        alt?: string;
+        caption?: string;
+        _type: "image";
+        _key: string;
+      }> | null;
+    }> | null;
+  } | {
+    _type: "quickDelivery";
+    _key: string;
+    title: string | null;
+    subtitle: string | null;
+    deliveryText: string | null;
+    banners: Array<{
+      title: string | null;
+      image: {
+        asset?: {
+          _ref: string;
+          _type: "reference";
+          _weak?: boolean;
+          [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
+        };
+        media?: unknown;
+        hotspot?: SanityImageHotspot;
+        crop?: SanityImageCrop;
+        _type: "image";
+      } | null;
+      link: {
+        label: string | null;
+        linkType: "external" | "internal" | null;
+        internalLink: {
+          slug: {
+            current: string;
+          };
+        } | null;
+        externalUrl: string | null;
+      };
+    }> | null;
+  } | {
+    _type: "testimonial";
+    _key: string;
+    testimonials: Array<{
+      author: string;
+      details: string | null;
+      review: number;
+    }> | null;
+  }> | null;
+} | null;
 // Variable: CATEGORIES_QUERY
 // Query: *[_type == "category" && categoryType == "parent"] | order(name asc) {    name,    "slug": slug.current,    "children": *[_type == "category" && categoryType == "child" && parent._ref == ^._id] | order(name asc) {      name,      "slug": slug.current    }  }
 export type CATEGORIES_QUERYResult = Array<{
@@ -497,6 +774,7 @@ export type PRODUCT_LISTING_QUERYResult = {
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
+    "\n  *[_type == \"homepage\"][0]{\n    _id,\n    \n  sections[]{\n    _type,\n    _key,\n    \n    _type == \"heroBanner\" => {\n      leftBanner {\n        image,\n        link {\n          \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n        }\n      },\n      rightBanner {\n        image,\n        link {\n          \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n        }\n      }\n    }\n,\n    \n    _type == \"categoryIconList\" => {\n     categories[]->{\n       name,\n       slug\n     }\n    }\n,\n    \n    _type == \"productsSection\" => {\n      title,\n      viewAllLink {\n        \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n      },\n      products[]->{\n        name,\n        \"slug\": slug.current,\n        images\n      }\n    }\n\n,\n    \n    _type == \"quickDelivery\" => {\n      title,\n      subtitle,\n      deliveryText,\n      banners[]{\n        title,\n        image,\n        link {\n          \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n        }\n      }\n    }\n,\n    \n    _type == \"banners\" => {\n        banner[]{\n          image,\n          link {\n            \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n          }\n        }\n    }\n,\n    \n     _type == \"testimonial\" => {\n        testimonials[]{\n          author,\n          details,\n          review\n        }\n    }\n,\n    \n    _type == \"faqs\" => {\n        description[],\n        questions[]{\n          _key,\n          question,\n          answer\n        }\n    }\n\n  }\n\n    // TODO: Add seo and schema\n  }\n": HomePageQueryResult;
     "\n  *[_type == \"category\" && categoryType == \"parent\"] | order(name asc) {\n    name,\n    \"slug\": slug.current,\n    \"children\": *[_type == \"category\" && categoryType == \"child\" && parent._ref == ^._id] | order(name asc) {\n      name,\n      \"slug\": slug.current\n    }\n  }\n": CATEGORIES_QUERYResult;
     "\n  *[_type == \"footer\"][0] {\n    statement1,\n    statement2,\n    navigation[] {\n      ...,\n      children[] {\n        ...,\n        \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n      },\n      \n  label,\n  linkType,\n  internalLink->{ slug { current } },\n  externalUrl\n\n    },\n  }\n": FOOTER_QUERYResult;
     "{\n  \"products\": \n *[_type == \"product\" && $categorySlug in productCategory[]->slug.current && (\n    $filter == \"\" || \n    ($filter == \"price_above_200\" && price > 200) || \n    ($filter == \"price_below_200\" && price < 200) || \n    ($filter == \"out_of_stock\" && isOutOfStock == true) || \n    ($filter == \"in_stock\" && isOutOfStock == false)\n  )]\n    | order(_createdAt desc)[$start...$end]{\n      _id,\n      name,\n      slug,\n      price,\n      images,\n    }\n,\n  \"totalProducts\": count(*[_type == \"product\" && $categorySlug in productCategory[]->slug.current && (\n   $filter == \"\" || \n    ($filter == \"price_above_200\" && price > 200) || \n    ($filter == \"price_below_200\" && price < 200) || \n    ($filter == \"out_of_stock\" && isOutOfStock == true) || \n    ($filter == \"in_stock\" && isOutOfStock == false)\n  )]),\n  \"category\": *[_type == \"category\" && slug.current == $categorySlug][0]{\n    name,\n    slug,\n    headerContent,\n    footerContent,\n  }\n}": PRODUCT_LISTING_QUERYResult;
