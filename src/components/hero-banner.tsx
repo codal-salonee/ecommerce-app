@@ -13,11 +13,20 @@ export default function HeroBanner({
   const leftBannerImage = resolveSanityUrl(leftBanner.image);
   const rightBannerImage = resolveSanityUrl(rightBanner.image);
 
+  const leftResolvedLink = leftBanner.link
+    .internalLink as typeof leftBanner.link.internalLink & {
+    slug?: { current: string };
+  };
+  const rightResolvedLink = rightBanner.link
+    .internalLink as typeof rightBanner.link.internalLink & {
+    slug?: { current: string };
+  };
+
   return (
     <Section>
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
         {leftBannerImage && (
-          <Link href={`/${leftBanner.link.internalLink?.slug?.current}`}>
+          <Link href={`/${leftResolvedLink?.slug?.current}`}>
             <div className="group relative cursor-pointer w-full aspect-2/1 overflow-hidden">
               <Image
                 src={leftBannerImage}
@@ -31,7 +40,7 @@ export default function HeroBanner({
           </Link>
         )}
         {rightBannerImage && (
-          <Link href={`/${rightBanner.link.internalLink?.slug?.current}`}>
+          <Link href={`/${rightResolvedLink?.slug?.current}`}>
             <div className="group relative cursor-pointer w-full aspect-2/1 overflow-hidden">
               <Image
                 src={rightBannerImage}

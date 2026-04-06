@@ -1,21 +1,28 @@
-import type { ProductsSection } from "@/sanity/types";
+import type { HomePageQueryResult, ProductsSection } from "@/sanity/types";
 import ProductCard from "./product-card";
 import Section from "./section";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
+export type ProductsSectionProps = Extract<
+  NonNullable<NonNullable<HomePageQueryResult>["sections"]>[number],
+  { _type: "productsSection" }
+>;
+
 export default function ProductsSection({
   title,
   viewAllLink,
   products,
-}: ProductsSection) {
+}: ProductsSectionProps) {
   return (
     <Section>
       <div className="flex justify-between items-center">
         <h2 className="text-2xl font-bold">{title}</h2>
-        <Link href={viewAllLink?.internalLink?.slug?.current}>
-          <Button>View All</Button>
-        </Link>
+        {viewAllLink?.internalLink?.slug?.current && (
+          <Link href={viewAllLink?.internalLink?.slug?.current}>
+            <Button>View All</Button>
+          </Link>
+        )}
       </div>
       <div className="pt-12">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">

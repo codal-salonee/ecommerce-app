@@ -24,9 +24,14 @@ export default function QuickDelivery({
 
         <div className="flex flex-wrap justify-center gap-8 md:gap-12 w-full">
           {banners?.map(({ image, title, link }) => {
+            if (!image) return null;
             const imageUrl = resolveSanityUrl(image);
+            const resolvedLink =
+              link.internalLink as typeof link.internalLink & {
+                slug?: { current: string };
+              };
             return (
-              <Link key={title} href={`/${link.internalLink?.slug?.current}`}>
+              <Link key={title} href={`/${resolvedLink?.slug?.current}`}>
                 <div className="flex flex-col items-center gap-3 cursor-pointer group w-28 md:w-36">
                   <div className="relative w-28 h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden shadow-sm group-hover:shadow-md transition-shadow duration-300">
                     {imageUrl && (

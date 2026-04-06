@@ -10,9 +10,13 @@ export default function Banners({ banner }: BannersProps) {
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 md:gap-8">
         {banner?.map(({ image, link }, index) => {
           const imageUrl = resolveSanityUrl(image);
+          const resolvedLink = link.internalLink as typeof link.internalLink & {
+            slug?: { current: string };
+          };
+
           if (!imageUrl) return null;
           return (
-            <Link key={index} href={`/${link.internalLink?.slug?.current}`}>
+            <Link key={index} href={`/${resolvedLink?.slug?.current}`}>
               <div className="group relative overflow-hidden min-h-[38vh] cursor-pointer rounded-2xl">
                 <Image
                   src={imageUrl}

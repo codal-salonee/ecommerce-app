@@ -1,44 +1,21 @@
 "use client";
 
 import { resolveSanityUrl } from "@/sanity/lib/image";
-import type {
-  SanityImageCrop,
-  SanityImageHotspot,
-  Slug,
-  internalGroqTypeReferenceTo,
-} from "@/sanity/types";
 import { Heart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 
+type ProductCardProps = {
+  // productDetails: NonNullable<NonNullable<ProductsSection["products"]>[number]>;
+  productDetails: any;
+  categoryName: string | undefined;
+};
+
 export default function ProductCard({
   productDetails,
   categoryName,
-}: {
-  productDetails: {
-    _id: string;
-    name: string;
-    slug: Slug;
-    price: number;
-    images: Array<{
-      asset?: {
-        _ref: string;
-        _type: "reference";
-        _weak?: boolean;
-        [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
-      };
-      media?: unknown;
-      hotspot?: SanityImageHotspot;
-      crop?: SanityImageCrop;
-      alt?: string;
-      caption?: string;
-      _type: "image";
-      _key: string;
-    }>;
-  };
-  categoryName: string | undefined;
-}) {
+}: ProductCardProps) {
   const { name, slug, price, images } = productDetails;
   const [wished, setWished] = useState(false);
 

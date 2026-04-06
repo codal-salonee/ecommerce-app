@@ -1,5 +1,6 @@
 - deploy studio 
 - deploy on vercel
+- resolve the typescript issue - resolved link and any
 - add a bit proper data
 - media - plugin
 - references - plugin
