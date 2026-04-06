@@ -16,7 +16,7 @@ export default async function Header() {
       <AnnouncementBar />
 
       {/* Main Header */}
-      <header className="bg-white  border-b border-foreground shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
+      <header className="bg-background border-b border-foreground shadow-[0_2px_20px_rgba(0,0,0,0.04)]">
         <div className="max-w-7xl mx-auto px-6 py-5 flex justify-between">
           {/* Logo */}
           <Link

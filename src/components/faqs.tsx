@@ -25,7 +25,7 @@ export default function Faqs({ questions, description }: FaqsProps) {
             <Button
               onClick={() => setIsExpanded(!isExpanded)}
               variant="ghost"
-              className="mt-3 p-0 text-primary"
+              className="mt-3 p-0 underline hover:bg-transparent font-bold"
             >
               {isExpanded ? "Read Less" : "Read More"}
             </Button>

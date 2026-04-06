@@ -23,8 +23,7 @@ export default function ProductsSection({
             <ProductCard
               key={product._id}
               productDetails={product}
-              // TODO: get category name
-              categoryName={"category?.name"}
+              categoryName={product?.productCategory?.[0]?.name}
             />
           ))}
         </div>

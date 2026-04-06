@@ -14,10 +14,10 @@ export default function QuickDelivery({
     <Section className="bg-primary rounded-2xl">
       <div className="flex flex-col items-center justify-center gap-4 md:gap-6">
         <div className="text-center max-w-3xl flex flex-col gap-3 items-center justify-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 leading-tight">
+          <h1 className="text-3xl md:text-4xl font-bold leading-tight">
             {title}
           </h1>
-          <p className="text-base md:text-lg italic font-semibold text-purple-600">
+          <p className="text-base md:text-lg italic text-background">
             {subtitle}
           </p>
         </div>
@@ -39,9 +39,7 @@ export default function QuickDelivery({
                       />
                     )}
                   </div>
-                  <span className="text-sm text-gray-700 text-center leading-snug">
-                    {title}
-                  </span>
+                  <span className=" text-center leading-snug ">{title}</span>
                 </div>
               </Link>
             );
@@ -49,7 +47,7 @@ export default function QuickDelivery({
         </div>
 
         <div className="text-center max-w-2xl flex flex-col gap-1.5 w-full">
-          <p className="text-sm text-gray-500 leading-relaxed">
+          <p className="text-sm text-background leading-relaxed">
             {deliveryText}
           </p>
         </div>

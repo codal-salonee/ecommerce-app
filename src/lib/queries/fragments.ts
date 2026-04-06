@@ -42,7 +42,10 @@ export const FRAGMENT_PRODUCTS_SECTION = `
         price,
         name,
         "slug": slug.current,
-        images
+        images,
+        productCategory[]->{
+          name
+        }
       }
     }
 

@@ -14,19 +14,22 @@ export default function NavBar({
   categoryList: CATEGORIES_QUERYResult;
 }) {
   return (
-    <NavigationMenu className="hidden md:flex">
+    <NavigationMenu className="hidden md:flex" viewport={false}>
       <NavigationMenuList className="gap-6">
         {categoryList.map(({ name, slug, children }) =>
           children.length > 0 ? (
             <NavigationMenuItem key={slug}>
-              <NavigationMenuTrigger className="text-primary font-extrabold">
+              <NavigationMenuTrigger className="text-primary font-extrabold text-md">
                 {name}
               </NavigationMenuTrigger>
               <NavigationMenuContent className="bg-white">
                 <ul className="w-40 py-2">
                   {children.map(({ name, slug }) => (
                     <li key={slug}>
-                      <NavigationMenuLink href={slug} className="text-primary">
+                      <NavigationMenuLink
+                        href={slug}
+                        className="hover:underline text-base"
+                      >
                         {name}
                       </NavigationMenuLink>
                     </li>
@@ -38,7 +41,7 @@ export default function NavBar({
             <NavigationMenuItem key={slug}>
               <NavigationMenuLink
                 href={slug}
-                className="text-primary font-extrabold"
+                className="text-primary font-extrabold text-md"
               >
                 {name}
               </NavigationMenuLink>

@@ -19,7 +19,7 @@ export default function CategoryIconList({
       <div className="flex justify-between">
         {categories?.map((category) => (
           <Link key={category.name} href={`/category/${category.slug.current}`}>
-            <div className="h-20 w-20 bg-primary flex items-center justify-center rounded-full">
+            <div className="text-bold h-14 w-26 bg-primary flex items-center justify-center rounded-3xl hover:border-8 hover:text-background">
               {category.name}
             </div>
           </Link>

@@ -18,7 +18,7 @@ export default async function Footer() {
         <div className="lg:col-span-2 flex flex-col gap-5">
           <Link
             href="/"
-            className="font-serif font-semibold text-[1.75rem] tracking-[0.08em] text-white no-underline"
+            className="font-serif font-semibold text-[1.75rem] tracking-[0.08em] text-background no-underline"
           >
             GIFTS<span className="text-primary">·</span>CO
           </Link>
@@ -28,7 +28,7 @@ export default async function Footer() {
 
           {/* Newsletter */}
           <div className="mt-2">
-            <p className="text-[0.7rem] tracking-widest uppercase text-primary mb-3">
+            <p className="text-[0.7rem] tracking-widest uppercase text-background mb-3">
               Subscribe to our newsletter
             </p>
             <div className="flex gap-2">
@@ -47,7 +47,7 @@ export default async function Footer() {
         {/* Link Columns */}
         {data?.navigation?.map(({ label, children }) => (
           <div key={label} className="flex flex-col gap-4">
-            <h4 className="text-[0.7rem] tracking-widest uppercase text-white font-medium">
+            <h4 className="tracking-widest uppercase text-white font-extrabold">
               {label}
             </h4>
             <ul className="flex flex-col gap-2.5">
@@ -59,7 +59,7 @@ export default async function Footer() {
                         ? externalUrl
                         : (internalLink?.slug.current ?? "/")
                     }
-                    className="text-sm text-background/80 hover:text-primary transition-colors duration-200 no-underline"
+                    className="text-base text-background/80 hover:text-primary transition-colors duration-200 hover:underline"
                   >
                     {label}
                   </Link>
@@ -74,7 +74,7 @@ export default async function Footer() {
 
       {/* Bottom Bar */}
       <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p className="text-[0.7rem] tracking-wider text-primary uppercase">
+        <p className="text-[0.7rem] tracking-wider text-background uppercase">
           {data?.statement2}
         </p>
 
