@@ -25,7 +25,6 @@ export default async function ProductListingPage({
       filter,
     },
   });
-  console.log("productsData==>", productsData);
 
   return (
     <ProductListing

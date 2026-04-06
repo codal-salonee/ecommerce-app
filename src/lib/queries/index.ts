@@ -66,3 +66,13 @@ export const PRODUCT_LISTING_QUERY = defineQuery(`{
     footerContent,
   }
 }`);
+
+export const PRODUCT_DETAIL_QUERY = defineQuery(
+  `*[_type == "product" && slug.current == $productSlug][0]{
+    ...,
+    productCategory[]->{
+      name,
+      slug
+    }
+  }`,
+);

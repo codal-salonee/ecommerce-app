@@ -9,7 +9,7 @@ import type {
 } from "@/sanity/types";
 import { Heart } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState } from "react";
 
 export default function ProductCard({
@@ -35,20 +35,19 @@ export default function ProductCard({
       caption?: string;
       _type: "image";
       _key: string;
-    }> | null;
+    }>;
   };
   categoryName: string | undefined;
 }) {
-  const { push } = useRouter();
   const { name, slug, price, images } = productDetails;
   const [wished, setWished] = useState(false);
 
   const image = resolveSanityUrl(images?.[0]);
 
   return (
-    <div
+    <Link
       className="group flex flex-col bg-white hover:border-primary hover:shadow-[0_8px_32px_rgba(0,0,0,0.08)] transition-all duration-300 cursor-pointer"
-      onClick={() => push(`/gift/${slug.current}`)}
+      href={`/detail/${slug?.current ?? slug}`}
     >
       {/* Product Image */}
       <div className="relative overflow-hidden aspect-3/4 bg-background">
@@ -95,6 +94,6 @@ export default function ProductCard({
           </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

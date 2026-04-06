@@ -10,10 +10,7 @@ export const urlFor = (source: SanityImageSource) => {
   return builder.image(source);
 };
 
-export const resolveSanityUrl = (
-  source?: SanityImageSource | string | null,
-) => {
-  if (!source) return null;
+export const resolveSanityUrl = (source: SanityImageSource | string) => {
   return typeof source === "string"
     ? source
     : builder.image(source).auto("format").url();

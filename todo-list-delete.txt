@@ -1,5 +1,4 @@
-- product detail
-- add social links in footer
+- make UI a bit appealing
 - make sure to add robot.txt file
 - deploy studio 
 - deploy on vercel
