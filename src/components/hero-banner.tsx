@@ -23,6 +23,7 @@ export default function HeroBanner({
                 src={leftBannerImage}
                 alt={leftBanner.link.label || "Hero Banner"}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 preload={isAboveTheFold}
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />
@@ -36,6 +37,7 @@ export default function HeroBanner({
                 src={rightBannerImage}
                 alt={rightBanner.link.label || "Hero Banner"}
                 fill
+                sizes="(max-width: 768px) 100vw, 50vw"
                 preload={isAboveTheFold}
                 className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               />

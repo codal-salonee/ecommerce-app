@@ -16,9 +16,10 @@ export default function Banners({ banner }: BannersProps) {
               <div className="group relative overflow-hidden min-h-[38vh] cursor-pointer rounded-2xl">
                 <Image
                   src={imageUrl}
-                  alt={"Hero Banner"}
+                  alt="Banners"
                   fill
                   className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             </Link>

@@ -27,6 +27,7 @@ export default function ImageSlider({
             src={resolveSanityUrl(images[mainImage])}
             alt={images[mainImage].caption ?? ""}
             fill
+            sizes="(max-width: 768px) 100vw, 50vw"
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />
         )}
@@ -73,6 +74,7 @@ export default function ImageSlider({
               alt="Product Image"
               className="w-full h-full object-cover"
               fill
+              sizes="80px"
             />
           </Button>
         ))}
